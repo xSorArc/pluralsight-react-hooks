@@ -8,12 +8,12 @@ export const Menu = () => {
                 <div className="navbar-nav">
                     <li className="nav-item">
                         <Link href='/'>
-                            <a className="nav-link">Home</a>
+                            {/* <a className="nav-link">Home</a> */}
                         </Link>
                     </li>
                     <li className="nav-item">
                         <Link href='/speakers'>
-                            <a className="nav-link">Speakers</a>
+                            {/* <a className="nav-link">Speakers</a> */}
                         </Link>
                     </li>
                 </div>

@@ -3,7 +3,7 @@ import SignMeUp from "./SignMeUp.js"
 
 export const Header = () => {
     const signupCallback = (email) => {
-        console.log(`sign up called with email ${email}`);
+        return console.log(`sign up called with email ${email}`);
     };
 
     return (
@@ -15,7 +15,7 @@ export const Header = () => {
                 </div>
                 <div className="col-12 col-sm-8 text-lg-right">
                     <div>
-                        <img src="/static/SVCClogo.png" />
+                        {/* <img src="/static/SVCClogo.png" alt="NoImgYet"/> */}
                     </div>
                     <h2>Silicon Valley Code Camp</h2>
                     <div className="row col-12 text-lg-right">
