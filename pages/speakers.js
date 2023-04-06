@@ -1,6 +1,8 @@
 import React from "react";
-import "../src/App.js";
+import App from "../src/App.js";
 
-export default function speakers() {
+function speakers() {
     return <App pageName="Speakers" />;
 }
+
+export default speakers;
