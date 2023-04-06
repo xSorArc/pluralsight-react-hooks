@@ -1,5 +1,5 @@
 import React from "react";
-import "../src/App.js";
+import App from "../src/App.js";
 
 function index() {
     return <App pageName="Home" />
