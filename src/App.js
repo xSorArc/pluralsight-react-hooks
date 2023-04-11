@@ -7,16 +7,20 @@ export const ConfigContext = React.createContext();
 const pageToShow = pageName => {
     if (pageName === "Home") return <Home />
     if (pageName === "Speakers") return <Speakers />
-}
+    return <div>Not Found</div>;
+};
 
 const configValue = {
-    showSpeakerSpeakingDays: true
+    showSignMeUp: false,
+    showSpeakerSpeakingDays: false
 };
 
 const App = ({ pageName }) => {
-    <ConfigContext.Provider value={configValue}>
+    return (
+        <ConfigContext.Provider value={configValue}>
         <div>{pageToShow(pageName)}</div>
-    </ConfigContext.Provider>
-}
+        </ConfigContext.Provider>
+    )
+};
 
 export default App;
