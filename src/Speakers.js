@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useReducer } from 'react';
+import React, { useEffect, useState, useContext, useReducer, useCallback } from 'react';
 import { Header } from "./Header.js";
 import { Menu } from "./Menu.js";
 import { ConfigContext } from './App.js';
@@ -67,18 +67,14 @@ const Speaker = ({}) => {
             return 0;
         });
 
-    const heartFavoriteHandler = (e, favoriteValue) => {
+    const heartFavoriteHandler = useCallback((e, favoriteValue) => {
         e.preventDefault();
         const sessionId = parseInt(e.target.attributes['data-sessionid'].value);
-        setSpeakerList(
-            speakerList.map((item) => {
-                if (item.id === sessionId) {
-                    return {...item, favorite: favoriteValue};
-                }
-                return item;
-            })
-        )
-    }
+        dispatch({
+            type: favoriteValue === true ? "favorite" : "unfavorite",
+            sessionId
+        });
+    }, []);
 
     if(isLoading) return <div>Loading...</div>
 
