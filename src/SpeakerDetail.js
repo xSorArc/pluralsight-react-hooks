@@ -2,8 +2,10 @@ import React from "react";
 import ImageToggleOnScroll from "./ImageToggleOnScroll.js";
 
 const SpeakerDetail = React.memo( ({
-    id, firstName, lastName, favorite, bio, onHeartFavoriteHandler
-    }) => {
+    id, firstName, lastName, favorite, bio, onHeartFavoriteHandler 
+}) => {
+    console.log(`SpeakerDetail:${id} ${firstName} ${lastName} ${favorite}`);
+    
     return (
         <div className="card col-4 cardmin">
             <ImageToggleOnScroll className="card-img-top" 

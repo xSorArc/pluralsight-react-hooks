@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useReducer, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useReducer, useCallback, useMemo } from 'react';
 import { Header } from "./Header.js";
 import { Menu } from "./Menu.js";
 import { ConfigContext } from './App.js';
@@ -8,6 +8,9 @@ import SpeakerDetail from './SpeakerDetail.js';
 const Speaker = ({}) => {
     const [speakingSaturday, setSpeakingSaturday] = useState(true);
     const [speakingSunday, setSpeakingSunday] = useState(true);
+    const [speakerList, dispatch] = useReducer(speakersReducer, []);
+    const [isLoading, setIsLoading] = useState(true);
+    const context = useContext(ConfigContext);
 
     // const [speakerList, setSpeakerList] = useState([]);
 
@@ -19,9 +22,6 @@ const Speaker = ({}) => {
             default: return state;
         }
     }
-    const [speakerList, dispatch] = useReducer(speakersReducer, []);
-    const [isLoading, setIsLoading] = useState(true);
-    const context = useContext(ConfigContext);
 
     useEffect(() => {
         setIsLoading(true);
@@ -34,11 +34,11 @@ const Speaker = ({}) => {
             const speakerListServerFilter = SpeakerData.filter(({ sat, sun }) => {
                 return (speakingSaturday && sat) || (speakingSunday && sun);
             });
-        });
-        //setSpeakerList(SpeakerData);
-        dispatch({
-            type: "setSpeakerList",
-            data: speakerListServerFilter
+        
+            dispatch({
+                type: "setSpeakerList",
+                data: speakerListServerFilter
+            });
         });
         return () => {
             console.log('cleanup');
@@ -53,20 +53,6 @@ const Speaker = ({}) => {
         setSpeakingSunday(!speakingSunday);
     }
 
-    const speakerListFiltered = isLoading ? [] :
-        speakerList.filter(
-            ({sat, sun}) => 
-                (speakingSaturday && sat) || (speakingSunday && sun),
-        ).sort(function(a,b) {
-            if (a.firstName < b.firstName) {
-                return -1;
-            }
-            if (a.firstName > b.firstName) {
-                return 1;
-            }
-            return 0;
-        });
-
     const heartFavoriteHandler = useCallback((e, favoriteValue) => {
         e.preventDefault();
         const sessionId = parseInt(e.target.attributes['data-sessionid'].value);
@@ -75,6 +61,23 @@ const Speaker = ({}) => {
             sessionId
         });
     }, []);
+
+    const newSpeakerList = useMemo(() => speakerList
+        .filter(
+            ({ sat, sun }) => (speakingSaturday && sat) || (speakingSunday && sun)
+        )
+        .sort(function(a, b) {
+            if (a.firstName < b.firstName) {
+                return -1;
+            }
+            if (a.firstName > b.firstName) {
+                return 1;
+            }
+            return 0;
+        }), [speakingSaturday, speakingSunday, speakerList]);
+
+    const speakerListFiltered = isLoading ? [] 
+        : newSpeakerList;
 
     if(isLoading) return <div>Loading...</div>
 
@@ -110,17 +113,23 @@ const Speaker = ({}) => {
                         {speakerListFiltered.map(
                             ({id, firstName, lastName, bio, favorite}) => {
                                 return (
-                                    <SpeakerDetail key={id} id={id} favorite={favorite} firstName={firstName} lastName={lastName} bio={bio}
-                                    onHeartFavoriteHandler={heartFavoriteHandler} />
-                                )
-                            }
-                        )}
+                                    <SpeakerDetail 
+                                        key={id} 
+                                        id={id} 
+                                        favorite={favorite} 
+                                        onHeartFavoriteHandler={heartFavoriteHandler} 
+                                        firstName={firstName} 
+                                        lastName={lastName} 
+                                        bio={bio}
+                                    />
+                                );
+                            },
+                        )};
                     </div>
                 </div>
             </div>
         </div>
-        
-    )
-}
+    );
+};
 
 export default Speaker;
